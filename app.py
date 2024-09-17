@@ -37,9 +37,9 @@ def main():
         
         pred = get_prediction(data=data, model=model)
 
-        if pred[0][0]< 0.5:
+        if pred[0][0]< 0.3:
             survival = 'No'
-        elif pred[0][0] > 0.5:
+        elif pred[0][0] > 0.7:
             survival = 'Yes'
 
         
