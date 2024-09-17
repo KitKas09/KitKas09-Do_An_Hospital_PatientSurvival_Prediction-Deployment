@@ -23,7 +23,7 @@ def main():
 
         st.header("Predict the input for following features:") 
                 
-        apache_3j_diagnosis = st.slider('gcs_motor_apache', 0.0300, 2201.05, value=1.0000, format="%f")  
+        apache_3j_diagnosis = st.slider('apache_3j_diagnosis', 0.0300, 2201.05, value=1.0000, format="%f")  
         gcs_motor_apache = st.slider('gcs_motor_apache', 1.0000, 6.0000, value=1.0000, format="%f")
         d1_lactate_max = st.selectbox( 'd1_lactate_max:', [3.970, 5.990, 0.900, 1.100, 1.200, 2.927, 9.960, 19.500])
         gcs_eyes_apache = st.selectbox('gcs-eyes-apache:', [2.380, 2.680, 6.860, 0.900, 1.100, 1.200, 1.000, 2.125])
