@@ -10,7 +10,7 @@ from prediction import get_prediction
 
 st.set_page_config(page_title='Hostpital Patient Survival Prediction', page_icon="🏥", layout="wide", initial_sidebar_state='expanded')
 
-model = load_model('keras_model.h5')
+model = load_model('keras_model01.h5')
 
 # creating option list for dropdown menu
 
