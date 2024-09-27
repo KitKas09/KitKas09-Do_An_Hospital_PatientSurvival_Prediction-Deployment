@@ -5,3 +5,5 @@ keras
 tensorflow
 scikit-learn
 protobuf
+plotly
+prediction
