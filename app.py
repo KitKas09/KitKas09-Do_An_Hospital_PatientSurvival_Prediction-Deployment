@@ -15,6 +15,10 @@ features = ['apache_3j_diagnosis', 'gcs_motor_apache', 'd1_lactate_max',
             'apache_4a_icu_death_prob', 'gcs-eyes-apache']
 
 
+
+
+
+
 # Hàm thêm sidebar
 def add_sidebar():
     st.sidebar.header("Predict the input for following features:")
@@ -79,7 +83,7 @@ def get_radar_chart(input_data):
         template='plotly_dark'  # Thêm template tối để hiển thị rõ hơn
     )
 
-    st.plotly_chart(fig)
+    return fig  # Trả về biểu đồ
 
 
 # Hàm tạo biểu đồ dự đoán
@@ -107,11 +111,12 @@ def get_prediction_wave_chart(pred):
         template='plotly_dark'
     )
 
-    st.plotly_chart(fig)
+    return fig  # Trả về biểu đồ
 
 
 # Hàm chính
 def main():
+
     # Thêm CSS để trang trí nút Predict
     st.markdown("""
         <style>
@@ -139,11 +144,12 @@ def main():
 
     input_data = add_sidebar()  # Nhận dữ liệu đầu vào
 
-    # Tạo hai cột để hiển thị hai biểu đồ song song
+    # Tạo hai cột để hiển thị biểu đồ radar và bảng song song
     col1, col2 = st.columns(2)
 
     with col1:
-        get_radar_chart(input_data)  # Vẽ biểu đồ radar trong cột đầu tiên
+        radar_fig = get_radar_chart(input_data)  # Vẽ biểu đồ radar trong cột đầu tiên
+        st.plotly_chart(radar_fig)
 
     submit = st.sidebar.button("Predict")
 
@@ -154,21 +160,33 @@ def main():
 
         # Thêm màu sắc dựa vào kết quả dự đoán
         if survival == 'Yes':
-            st.markdown(
-                f"<h3 style='text-align: center; color: #28a745;'>The predicted Patient Survival is: {survival}</h3>",
-                unsafe_allow_html=True)
+            survival_color = '#28a745'
         else:
-            st.markdown(
-                f"<h3 style='text-align: center; color: #dc3545;'>The predicted Patient Survival is: {survival}</h3>",
-                unsafe_allow_html=True)
+            survival_color = '#dc3545'
+
+        # Hiển thị bảng với kết quả dự đoán và bảng xác suất
+        with col2:
+            st.markdown(f"<h3 style='text-align: center; color: {survival_color};'>The predicted Patient Survival is: {survival}</h3>",
+                        unsafe_allow_html=True)
+
+            # Hiển thị bảng xác suất
+            prob_data = {
+                'Outcome': ['Survival', 'Death'],
+                'Probability': [pred[0][0], 1 - pred[0][0]]
+            }
+            prob_df = pd.DataFrame(prob_data)
+
+            st.markdown("<h4 style='text-align: center;'>Probability Table</h4>", unsafe_allow_html=True)
+            st.table(prob_df)  # Hiển thị bảng xác suất
+
+            # Hiển thị biểu đồ dự đoán
+            prediction_fig = get_prediction_wave_chart(pred)
+            st.plotly_chart(prediction_fig)
 
         st.markdown(
             "<p style='text-align: center;'>This app can assist medical professionals in making a diagnosis, "
             "but should not be used as a substitute for a professional diagnosis.</p>", unsafe_allow_html=True)
 
-        # Hiển thị biểu đồ dự đoán trong cột thứ hai
-        with col2:
-            get_prediction_wave_chart(pred)
 
 
 if __name__ == '__main__':
